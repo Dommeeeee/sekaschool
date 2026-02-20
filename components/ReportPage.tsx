@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
-import { addIssue, getIssues, seedDemoData } from '@/lib/storage';
+import { addIssueToFirebase, getIssuesFromFirebase, seedDemoDataToFirebase } from '@/lib/firebase-storage';
 import { Issue, IssueCategory } from '@/lib/types';
 import IssueCard from './IssueCard';
 import IssueDetailModal from './IssueDetailModal';
@@ -44,19 +44,31 @@ export default function ReportPage() {
   });
 
   useEffect(() => {
-    seedDemoData();
-    setIssues(getIssues());
+    const initializeData = async () => {
+      await seedDemoDataToFirebase();
+    };
+    initializeData();
+
+    // Set up real-time listener
+    const unsubscribe = getIssuesFromFirebase((issuesData) => {
+      setIssues(issuesData);
+    });
+
+    // Cleanup listener on unmount
+    return () => {
+      if (unsubscribe) unsubscribe();
+    };
   }, []);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitting(true);
-    setTimeout(() => {
-      const newIssue = addIssue(form);
+    try {
+      const newIssue = await addIssueToFirebase(form);
       setSubmittedId(newIssue.id);
       setSubmitted(true);
-      setSubmitting(false);
-      setIssues(getIssues());
+      
+      // รีเซ็ตฟอร์ม - ข้อมูลจะอัปเดตอัตโนมัติจาก real-time listener
       setForm({
         title: '',
         description: '',
@@ -66,7 +78,12 @@ export default function ReportPage() {
         reporterContact: '',
         location: '',
       });
-    }, 600);
+    } catch (error) {
+      console.error('Error submitting issue:', error);
+      alert('เกิดข้อผิดพลาดในการส่งปัญหา กรุณาลองใหม่');
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   const filteredIssues = issues.filter((issue) => {

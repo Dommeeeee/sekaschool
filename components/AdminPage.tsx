@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { Issue, IssueStatus, IssueCategory } from '@/lib/types';
-import { getIssues, seedDemoData, getStats } from '@/lib/storage';
+import { getIssuesFromFirebase, seedDemoDataToFirebase, getStatsFromFirebase } from '@/lib/firebase-storage';
 import IssueCard from './IssueCard';
 import IssueDetailModal from './IssueDetailModal';
 import StatusBadge from './StatusBadge';
@@ -45,8 +45,20 @@ export default function AdminPage() {
 
   useEffect(() => {
     if (isAuthenticated) {
-      seedDemoData();
-      setIssues(getIssues());
+      const initializeData = async () => {
+        await seedDemoDataToFirebase();
+      };
+      initializeData();
+
+      // Set up real-time listener
+      const unsubscribe = getIssuesFromFirebase((issuesData) => {
+        setIssues(issuesData);
+      });
+
+      // Cleanup listener on unmount or when auth changes
+      return () => {
+        if (unsubscribe) unsubscribe();
+      };
     }
   }, [isAuthenticated]);
 
@@ -67,8 +79,13 @@ export default function AdminPage() {
     setPassword('');
   };
 
-  const refreshData = () => {
-    setIssues(getIssues());
+  const refreshData = async () => {
+    try {
+      // Real-time listener จะอัปเดตข้อมูลอัตโนมัติ แต่เราสามารถ seed ข้อมูลใหม่ได้
+      await seedDemoDataToFirebase();
+    } catch (error) {
+      console.error('Error refreshing data:', error);
+    }
   };
 
   const stats = {

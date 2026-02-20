@@ -5,7 +5,7 @@ import StatusBadge from './StatusBadge';
 import PriorityBadge from './PriorityBadge';
 import { X, MapPin, User, Phone, Calendar, Tag, MessageSquare, CheckCircle, Clock, Wrench, Trash2 } from 'lucide-react';
 import { useState } from 'react';
-import { updateIssue, deleteIssue } from '@/lib/storage';
+import { updateIssueInFirebase, deleteIssueFromFirebase } from '@/lib/firebase-storage';
 
 interface Props {
   issue: Issue;
@@ -30,24 +30,41 @@ export default function IssueDetailModal({ issue, onClose, onUpdate, onDelete, i
   const [saving, setSaving] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState(false);
 
-  const handleStatusChange = (status: IssueStatus) => {
+  const handleStatusChange = async (status: IssueStatus) => {
     setSaving(true);
-    const updated = updateIssue(issue.id, { status, adminNote });
-    if (updated) onUpdate(updated);
-    setSaving(false);
+    try {
+      const updated = await updateIssueInFirebase(issue.id, { status, adminNote });
+      if (updated) onUpdate(updated);
+    } catch (error) {
+      console.error('Error updating issue status:', error);
+      alert('เกิดข้อผิดพลาดในการอัปเดตสถานะ');
+    } finally {
+      setSaving(false);
+    }
   };
 
-  const handleSaveNote = () => {
+  const handleSaveNote = async () => {
     setSaving(true);
-    const updated = updateIssue(issue.id, { adminNote });
-    if (updated) onUpdate(updated);
-    setSaving(false);
+    try {
+      const updated = await updateIssueInFirebase(issue.id, { adminNote });
+      if (updated) onUpdate(updated);
+    } catch (error) {
+      console.error('Error saving admin note:', error);
+      alert('เกิดข้อผิดพลาดในการบันทึกหมายเหตุ');
+    } finally {
+      setSaving(false);
+    }
   };
 
-  const handleDelete = () => {
-    deleteIssue(issue.id);
-    onDelete(issue.id);
-    onClose();
+  const handleDelete = async () => {
+    try {
+      await deleteIssueFromFirebase(issue.id);
+      onDelete(issue.id);
+      onClose();
+    } catch (error) {
+      console.error('Error deleting issue:', error);
+      alert('เกิดข้อผิดพลาดในการลบปัญหา');
+    }
   };
 
   return (

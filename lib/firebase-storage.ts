@@ -120,45 +120,6 @@ export async function getStatsFromFirebase(): Promise<IssueStats> {
 
 // ฟังก์ชันสำหรับ seed ข้อมูลตัวอย่างบน Firebase
 export async function seedDemoDataToFirebase(): Promise<void> {
-  try {
-    const existingIssues = await getIssuesOnce();
-    if (existingIssues.length > 0) return;
-
-    const demoIssues = [
-      {
-        title: 'ไฟฟ้าดับในห้องเรียน ม.3/2',
-        description: 'ไฟฟ้าในห้องเรียนดับตั้งแต่เช้า ไม่สามารถใช้งานได้ ส่งผลต่อการเรียนการสอน',
-        category: 'ระบบไฟฟ้าและประปา' as const,
-        priority: 'high' as const,
-        reporterName: 'ครูสมชาย',
-        reporterContact: '081-234-5678',
-        location: 'อาคาร 2 ชั้น 3 ห้อง 302',
-      },
-      {
-        title: 'ห้องน้ำนักเรียนชายชำรุด',
-        description: 'ก๊อกน้ำในห้องน้ำนักเรียนชายชำรุด 3 จุด น้ำไหลตลอดเวลา',
-        category: 'สุขอนามัย' as const,
-        priority: 'medium' as const,
-        reporterName: 'นักเรียน ม.5',
-        reporterContact: '',
-        location: 'อาคาร 1 ชั้น 1',
-      },
-      {
-        title: 'คอมพิวเตอร์ห้อง Lab เปิดไม่ติด',
-        description: 'คอมพิวเตอร์ในห้อง Lab จำนวน 5 เครื่องเปิดไม่ติด ไม่สามารถใช้สอนได้',
-        category: 'อินเทอร์เน็ตและคอมพิวเตอร์' as const,
-        priority: 'high' as const,
-        reporterName: 'ครูวิทยา',
-        reporterContact: '089-876-5432',
-        location: 'ห้อง Computer Lab อาคาร 3',
-      },
-    ];
-
-    // เพิ่มข้อมูลตัวอย่างทีละรายการ
-    for (const issue of demoIssues) {
-      await addIssueToFirebase(issue);
-    }
-  } catch (error) {
-    console.error('Error seeding demo data:', error);
-  }
+  // ไม่มีข้อมูลตัวอย่าง - เริ่มต้นด้วยรายการว่างเปล่า
+  console.log('Firebase demo data seeding skipped - starting with empty issues list');
 }

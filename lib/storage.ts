@@ -66,53 +66,6 @@ export function getStats(): IssueStats {
 }
 
 export function seedDemoData(): void {
-  const existing = getIssues();
-  if (existing.length > 0) return;
-
-  const demos: Issue[] = [
-    {
-      id: 'ISS-DEMO-001',
-      title: 'ไฟฟ้าดับในห้องเรียน ม.3/2',
-      description: 'ไฟฟ้าในห้องเรียนดับตั้งแต่เช้า ไม่สามารถใช้งานได้ ส่งผลต่อการเรียนการสอน',
-      category: 'ระบบไฟฟ้าและประปา',
-      priority: 'high',
-      status: 'inprogress',
-      reporterName: 'ครูสมชาย',
-      reporterContact: '081-234-5678',
-      location: 'อาคาร 2 ชั้น 3 ห้อง 302',
-      createdAt: new Date(Date.now() - 86400000 * 2).toISOString(),
-      updatedAt: new Date(Date.now() - 86400000).toISOString(),
-      adminNote: 'ช่างไฟกำลังดำเนินการแก้ไข',
-    },
-    {
-      id: 'ISS-DEMO-002',
-      title: 'ห้องน้ำนักเรียนชายชำรุด',
-      description: 'ก๊อกน้ำในห้องน้ำนักเรียนชายชำรุด 3 จุด น้ำไหลตลอดเวลา',
-      category: 'สุขอนามัย',
-      priority: 'medium',
-      status: 'resolved',
-      reporterName: 'นักเรียน ม.5',
-      reporterContact: '',
-      location: 'อาคาร 1 ชั้น 1',
-      createdAt: new Date(Date.now() - 86400000 * 5).toISOString(),
-      updatedAt: new Date(Date.now() - 86400000 * 1).toISOString(),
-      resolvedAt: new Date(Date.now() - 86400000 * 1).toISOString(),
-      adminNote: 'ซ่อมแซมเรียบร้อยแล้ว',
-    },
-    {
-      id: 'ISS-DEMO-003',
-      title: 'คอมพิวเตอร์ห้อง Lab เปิดไม่ติด',
-      description: 'คอมพิวเตอร์ในห้อง Lab จำนวน 5 เครื่องเปิดไม่ติด ไม่สามารถใช้สอนได้',
-      category: 'อินเทอร์เน็ตและคอมพิวเตอร์',
-      priority: 'high',
-      status: 'pending',
-      reporterName: 'ครูวิทยา',
-      reporterContact: '089-876-5432',
-      location: 'ห้อง Computer Lab อาคาร 3',
-      createdAt: new Date(Date.now() - 3600000 * 3).toISOString(),
-      updatedAt: new Date(Date.now() - 3600000 * 3).toISOString(),
-    },
-  ];
-
-  saveIssues(demos);
+  // ไม่มีข้อมูลตัวอย่าง - เริ่มต้นด้วยรายการว่างเปล่า
+  console.log('LocalStorage demo data seeding skipped - starting with empty issues list');
 }

@@ -23,7 +23,7 @@ export function addIssue(issue: Omit<Issue, 'id' | 'createdAt' | 'updatedAt' | '
   const issues = getIssues();
   const newIssue: Issue = {
     ...issue,
-    id: `ISS-${Date.now()}-${Math.random().toString(36).substr(2, 5).toUpperCase()}`,
+    id: `ISS-${Date.now().toString().slice(-6)}`,
     status: 'pending',
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),

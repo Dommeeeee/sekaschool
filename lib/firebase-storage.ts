@@ -34,7 +34,7 @@ export async function addIssueToFirebase(issue: Omit<Issue, 'id' | 'createdAt' |
   
   const newIssue: Issue = {
     ...issue,
-    id: newIssueRef.key || `ISS-${Date.now()}-${Math.random().toString(36).substr(2, 5).toUpperCase()}`,
+    id: `ISS-${Date.now().toString().slice(-6)}`,
     status: 'pending',
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),

@@ -57,9 +57,12 @@ const firebaseConfig = {
   storageBucket: "school-92721.firebasestorage.app",
   messagingSenderId: "575199760636",
   appId: "1:575199760636:web:ae6b7005706288449ec779",
-  measurementId: "G-Y7JQ7XP9KC"
+  measurementId: "G-Y7JQ7XP9KC",
+  databaseURL: "https://school-92721-default-rtdb.asia-southeast1.firebasedatabase.app/"
 };
 ```
+
+**Database URL**: https://school-92721-default-rtdb.asia-southeast1.firebasedatabase.app/
 
 ## 🛠️ Tech Stack
 
